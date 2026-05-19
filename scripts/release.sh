@@ -320,8 +320,10 @@ cmd_tag() {
         local actual
         actual="$(read_toml_version "$cargo")" \
             || die "could not read current version from $cargo"
-        [[ "$actual" == "$version" ]] \
-            || die "$cargo on main has version '$actual', expected '$version' (was the bump PR merged?)"
+        if [[ $DRY_RUN -eq 0 ]]; then
+            [[ "$actual" == "$version" ]] \
+                || die "$cargo on main has version '$actual', expected '$version' (was the bump PR merged?)"
+        fi
 
         local tag="${short}-v${version}"
         if git -C "$REPO_ROOT" rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
