@@ -281,6 +281,7 @@ cmd_bump() {
     for pair in "${PAIRS[@]}"; do body+=" ${pair}"; done
     body+=$'\n```\n'
 
+    run gh repo set-default "$REMOTE"
     run gh pr create \
         --repo-clone-protocol https \
         --base main \
