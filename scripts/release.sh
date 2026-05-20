@@ -278,9 +278,11 @@ cmd_bump() {
         body+="- ${pretty} (\`${short}\`): \`${version}\`"$'\n'
     done
     body+=$'\nAfter merging, sign and push the release tags from main:\n\n```\nscripts/release.sh tag'
+    body+=" --remote $REMOTE"
     for pair in "${PAIRS[@]}"; do body+=" ${pair}"; done
     body+=$'\n```\n'
 
+    run gh repo set-default "$REMOTE"
     run gh pr create \
         --repo-clone-protocol https \
         --base main \
@@ -320,8 +322,10 @@ cmd_tag() {
         local actual
         actual="$(read_toml_version "$cargo")" \
             || die "could not read current version from $cargo"
-        [[ "$actual" == "$version" ]] \
-            || die "$cargo on main has version '$actual', expected '$version' (was the bump PR merged?)"
+        if [[ $DRY_RUN -eq 0 ]]; then
+            [[ "$actual" == "$version" ]] \
+                || die "$cargo on main has version '$actual', expected '$version' (was the bump PR merged?)"
+        fi
 
         local tag="${short}-v${version}"
         if git -C "$REPO_ROOT" rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
