@@ -1,6 +1,6 @@
 [package]
 name = "trigger-sqs"
-version = "0.13.1-vdice-test"
+version = "0.13.1-vdice-test2"
 authors.workspace = true
 edition.workspace = true
 rust-version.workspace = true
