@@ -65,7 +65,8 @@ jobs:
           shared-key: "release-${{ inputs.package }}-${{ matrix.config.target }}-${{ hashFiles('Cargo.lock') }}"
           cache-on-failure: "true"
       - name: Install Spin
-        uses: spinframework/actions/spin/setup@v1
+        # TODO: bump to v1 once available; see https://github.com/spinframework/actions/issues/20
+        uses: spinframework/actions/spin/setup@06319d3612303cb558fabe9b13cc0d7256d0aeb9
         with:
           version: ${{ inputs.spin_version }}
           plugins: pluginify
@@ -103,7 +104,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Install Spin
-        uses: spinframework/actions/spin/setup@v1
+        # TODO: bump to v1 once available; see https://github.com/spinframework/actions/issues/20
+        uses: spinframework/actions/spin/setup@06319d3612303cb558fabe9b13cc0d7256d0aeb9
         with:
           version: ${{ inputs.spin_version }}
           plugins: pluginify
