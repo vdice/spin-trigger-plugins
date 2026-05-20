@@ -278,6 +278,7 @@ cmd_bump() {
         body+="- ${pretty} (\`${short}\`): \`${version}\`"$'\n'
     done
     body+=$'\nAfter merging, sign and push the release tags from main:\n\n```\nscripts/release.sh tag'
+    body+=" --remote $REMOTE"
     for pair in "${PAIRS[@]}"; do body+=" ${pair}"; done
     body+=$'\n```\n'
 
