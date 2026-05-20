@@ -6803,7 +6803,7 @@ dependencies = [
 
 [[package]]
 name = "trigger-sqs"
-version = "0.13.0"
+version = "0.13.1-vdice-test"
 dependencies = [
  "anyhow",
  "aws-config",
