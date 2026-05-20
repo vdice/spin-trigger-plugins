@@ -5,8 +5,14 @@ name: CI
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'scripts/release.sh'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'scripts/release.sh'
   workflow_dispatch:
 
 permissions:
