@@ -24,7 +24,7 @@ jobs:
     name: Lint (fmt + clippy + audit)
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: ${{ env.RUST_TOOLCHAIN }}
@@ -55,7 +55,7 @@ jobs:
           - { target: "aarch64-apple-darwin",      os: "macos-14",       arch: "aarch64", extension: "" }
           - { target: "x86_64-pc-windows-msvc",    os: "windows-latest", arch: "amd64",   extension: ".exe" }
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: ${{ env.RUST_TOOLCHAIN }}
@@ -79,7 +79,7 @@ jobs:
     name: Unit tests
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: ${{ env.RUST_TOOLCHAIN }}
