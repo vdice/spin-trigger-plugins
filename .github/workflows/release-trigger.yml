@@ -27,11 +27,6 @@ on:
         required: false
         type: string
         default: "canary"
-      pluginify_url:
-        description: "URL of the spin-pluginify plugin manifest"
-        required: false
-        type: string
-        default: ""
       release_tag:
         description: "GitHub release tag to publish to (defaults to the pushed tag)"
         required: false
@@ -60,7 +55,7 @@ jobs:
           - { target: "aarch64-apple-darwin",      os: "macos-14",       arch: "aarch64", extension: "" }
           - { target: "x86_64-pc-windows-msvc",    os: "windows-latest", arch: "amd64",   extension: ".exe" }
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: ${{ inputs.rust_toolchain }}
@@ -70,17 +65,10 @@ jobs:
           shared-key: "release-${{ inputs.package }}-${{ matrix.config.target }}-${{ hashFiles('Cargo.lock') }}"
           cache-on-failure: "true"
       - name: Install Spin
-        uses: rajatjindal/setup-actions/spin@main
+        uses: spinframework/actions/spin/setup@v1
         with:
           version: ${{ inputs.spin_version }}
-      - name: Install pluginify
-        shell: bash
-        run: |
-          if [ -n "${{ inputs.pluginify_url }}" ]; then
-            spin plugins install --url "${{ inputs.pluginify_url }}" --yes
-          else
-            spin plugins install pluginify --yes
-          fi
+          plugins: pluginify
       - name: Set up cross-compiled linux aarch64 build
         if: matrix.config.target == 'aarch64-unknown-linux-gnu'
         run: |
@@ -101,7 +89,7 @@ jobs:
         working-directory: crates/${{ inputs.crate }}
         run: spin pluginify --arch ${{ matrix.config.arch }}
       - name: Archive pluginified
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ inputs.package }}-${{ matrix.config.os }}-${{ matrix.config.arch }}
           path: |
@@ -113,19 +101,12 @@ jobs:
     runs-on: ubuntu-22.04
     needs: build
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Install Spin
-        uses: rajatjindal/setup-actions/spin@main
+        uses: spinframework/actions/spin/setup@v1
         with:
           version: ${{ inputs.spin_version }}
-      - name: Install pluginify
-        shell: bash
-        run: |
-          if [ -n "${{ inputs.pluginify_url }}" ]; then
-            spin plugins install --url "${{ inputs.pluginify_url }}" --yes
-          else
-            spin plugins install pluginify --yes
-          fi
+          plugins: pluginify
       - name: Resolve release tag
         shell: bash
         run: |
@@ -137,7 +118,7 @@ jobs:
             echo "RELEASE_TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
           fi
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: ${{ inputs.package }}-*
           path: crates/${{ inputs.crate }}/artifacts
